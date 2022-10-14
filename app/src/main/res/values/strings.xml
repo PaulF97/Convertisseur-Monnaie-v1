@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Convertisseur2</string>
+    <string name="valeur_de_la_convertion" />
+    <string name="entrer_le_montant_en_euros_convertir" />
+
+    <string-array name="currenceChoice">
+        <item>Choose the currency</item>
+        <item>Dollar</item>
+        <item>Peso</item>
+        <item>Yen</item>
+        <item>Euro</item>
+    </string-array>
+    <string-array name="currencySelection">
+        <item>Select the final currency</item>
+        <item>Dollar</item>
+        <item>Peso</item>
+        <item>Yen</item>
+        <item>Euro</item>
+    </string-array>
+</resources>
