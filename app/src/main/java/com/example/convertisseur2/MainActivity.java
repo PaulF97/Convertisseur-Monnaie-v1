@@ -231,5 +231,58 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    private class TestBackground extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Log.d(TAG, "In the Background task to work on XML file");
+            String rateFromXML = null;
+
+            HashMap<String, String> xmlCurrencyRate = new HashMap<String, String>();
+            // parse XML files and put data in nodeLists
+            DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder xmlBuilder = null;
+            try {
+                xmlBuilder = xmlFactory.newDocumentBuilder();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+            Document xmlFile = null;
+            try {
+                assert xmlBuilder != null;
+                xmlFile = xmlBuilder.parse("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
+            NodeList myCubes = xmlFile.getElementsByTagName("Cube"); // extract nodes "Cube"
+
+            for (int i = 0; i < myCubes.getLength(); i++) {
+                Node data = myCubes.item(i);
+                Element currency = (Element) data;
+                Element currencyValue = (Element) data;
+                String currencyXML = currency.getAttribute("currency"); // get currency
+                String currencyRate = currencyValue.getAttribute("rate"); // get rate
+                xmlCurrencyRate.put(currencyXML, currencyRate); // put currency and rate in a hash map
+            }
+            if(strings.length > 0){
+                if (strings[0] == "dollar" || strings[1] == "dollar") {
+                    rateFromXML = xmlCurrencyRate.get("USD");
+                    Log.d(TAG,rateFromXML );
+                } else if(strings[0] == "Yen(JPY)" || strings[1] == "Yen(JPY)"){
+                    rateFromXML = xmlCurrencyRate.get("JPY");
+                } else if (strings[0] == "Peso(MXN)" || strings[1] == "Peso(MXN)"){
+                    rateFromXML = xmlCurrencyRate.get("MXN");
+                }
+            }
+            return rateFromXML;
+        }
+
+        protected void onPostExecute(String aVoid) {
+            Log.d(TAG,"test");
+        }
+    }
 }
 
