@@ -3,6 +3,7 @@ package com.example.convertisseur2;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,22 +12,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -39,12 +40,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String currencyTXTinit;
     private String currencyTXTDest;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     @Override
@@ -76,29 +77,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "button pressed");
-                //TestBackground xmlBackground = new TestBackground();
-               // xmlBackground.execute();
-
+                TestBackground xmlBackground = new TestBackground();
+                xmlBackground.execute();
                 myResultInDollar.setText(String.valueOf(toDollar));
-
                 if (Objects.equals(currencyTXTinit, "Euro(EURO)")) { // euro devise de départ
                     if (Objects.equals(currencyTXTDest, "Dollar(USD)")) {
-                      //  backgroundXML.doInBackground("fromEuro","toDollar");
-                       // String rateFromXML = xmlBackground.doInBackground("euro","dollar");
+                        String rateFromXML = xmlBackground.doInBackground("euro", "dollar");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
-                        toDollar = (float) (theNumberToDouble * 0.98);
+                        Float xmlToFloat = Float.parseFloat(rateFromXML);// convert to double
+                        toDollar = (float) (theNumberToDouble * xmlToFloat);
                         Log.d(TAG, "Convertion euro => dollar");
                         myResultInDollar.setText(String.valueOf(toDollar) + "$");
                     } else if (Objects.equals(currencyTXTDest, "Peso(MXN)")) {
-                        //backgroundXML.doInBackground("fromEuro","toPeso");
+                        String rateFromXML = xmlBackground.doInBackground("fromEuro","toPeso");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
-                        toDollar = (float) (theNumberToDouble * 147.87);
+                        Float xmlToFloat = Float.parseFloat(rateFromXML);// convert to double
+                        toDollar = (float) (theNumberToDouble * xmlToFloat);
                         Log.d(TAG, "convertion euro => pesos");
                         myResultInDollar.setText(String.valueOf(toDollar) + "$Ar");
                     } else if (Objects.equals(currencyTXTDest, "Yen(JPY)")) {
-                       // backgroundXML.doInBackground("fromEuro","toYen");
+                        // backgroundXML.doInBackground("fromEuro","toYen");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 143.87);
@@ -114,9 +114,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         toDollar = (float) (theNumberToDouble / 0.98);
                         Log.d(TAG, "Convertion dollar => euro");
                         myResultInDollar.setText(String.valueOf(toDollar) + "€");
-
                     } else if (Objects.equals(currencyTXTDest, "Peso(MXN)")) {
-                       // backgroundXML.doInBackground("fromDollar","toPeso");
+                        // backgroundXML.doInBackground("fromDollar","toPeso");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 151.32);
@@ -141,14 +140,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Log.d(TAG, "Convertion yen => euro");
                         myResultInDollar.setText(String.valueOf(toDollar) + "€");
                     } else if (Objects.equals(currencyTXTDest, "Peso(MXN)")) {
-                       // backgroundXML.doInBackground("fromYen","toPeso");
+                        // backgroundXML.doInBackground("fromYen","toPeso");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 1.03);
                         Log.d(TAG, "convertion yen => pesos");
                         myResultInDollar.setText(String.valueOf(toDollar) + "$Ar");
                     } else if (Objects.equals(currencyTXTDest, "Dollar(USD)")) {
-                       // backgroundXML.doInBackground("fromYen","toDollar");
+                        // backgroundXML.doInBackground("fromYen","toDollar");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble / 147.14);
@@ -159,21 +158,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 } else if (Objects.equals(currencyTXTinit, "Peso(MXN)")) {
                     if (Objects.equals(currencyTXTDest, "Euro(EURO)")) {
-                      //  backgroundXML.doInBackground("fromPeso","toEuro");
+                        //  backgroundXML.doInBackground("fromPeso","toEuro");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 0.0068);
                         Log.d(TAG, "Convertion pesos => euro");
                         myResultInDollar.setText(String.valueOf(toDollar) + "€");
                     } else if (Objects.equals(currencyTXTDest, "Yen(JPY)")) {
-                       // backgroundXML.doInBackground("fromPeso","toYen");
+                        // backgroundXML.doInBackground("fromPeso","toYen");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 0.97);
                         Log.d(TAG, "convertion pesos => Yen(JPY)");
                         myResultInDollar.setText(String.valueOf(toDollar) + "¥");
                     } else if (Objects.equals(currencyTXTDest, "Dollar(USD)")) {
-                       // backgroundXML.doInBackground("fromPeso","toDollar");
+                        // backgroundXML.doInBackground("fromPeso","toDollar");
                         theNumber = myEuroNumber.getText().toString(); // récupération du EditString
                         theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                         toDollar = (float) (theNumberToDouble * 0.0066);
@@ -182,8 +181,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     } else {
                         myResultInDollar.setText("Vous avez choisit la même currency de destination");
                     }
-                } else if (Objects.equals(currencyTXTinit, "Choose the currency") || Objects.equals(currencyTXTDest, "Select the final currency"))
+                } else if (Objects.equals(currencyTXTinit, "Choose the currency") || Objects.equals(currencyTXTDest, "Select the final currency")){
                     myResultInDollar.setText("Faite une convertion");
+                }
             }
         });
     }
@@ -227,62 +227,89 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // Toast.makeText(adapterView.getContext(), currencyTXTDest, Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+        Log.d(TAG,"no spinner selected");
     }
 
     private class TestBackground extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            Log.d(TAG, "In the Background task to work on XML file");
             String rateFromXML = null;
-
-            HashMap<String, String> xmlCurrencyRate = new HashMap<String, String>();
-            // parse XML files and put data in nodeLists
-            DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder xmlBuilder = null;
             try {
+                Log.d(TAG, "In the Background task to work on XML file");
+
+                HashMap<String, String> xmlCurrencyRate = new HashMap<String, String>();
+                // parse XML files and put data in nodeLists
+                DocumentBuilderFactory xmlFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder xmlBuilder = null;
                 xmlBuilder = xmlFactory.newDocumentBuilder();
+                assert xmlBuilder != null;
+                Document xmlFile = xmlBuilder.parse("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+                NodeList myCubes = xmlFile.getElementsByTagName("Cube"); // extract nodes "Cube"
+                for (int i = 0; i < myCubes.getLength(); i++) {
+                    Node data = myCubes.item(i);
+                    Element currency = (Element) data;
+                    Element currencyValue = (Element) data;
+                    String currencyXML = currency.getAttribute("currency"); // get currency
+                    String currencyRate = currencyValue.getAttribute("rate"); // get rate
+                    xmlCurrencyRate.put(currencyXML, currencyRate); // put currency and rate in a hash map
+                }
+              /*  Log.d(TAG,xmlCurrencyRate.get("USD"));
+                Log.d(TAG,xmlCurrencyRate.get("JPY"));
+                Log.d(TAG,xmlCurrencyRate.get("BGN"));
+                Log.d(TAG,xmlCurrencyRate.get("CZK"));
+                Log.d(TAG,xmlCurrencyRate.get("DKK"));
+                Log.d(TAG,xmlCurrencyRate.get("GBP"));
+                Log.d(TAG,xmlCurrencyRate.get("HUF"));
+                Log.d(TAG,xmlCurrencyRate.get("PLN"));
+                Log.d(TAG,xmlCurrencyRate.get("RON"));
+                Log.d(TAG,xmlCurrencyRate.get("SEK"));
+                Log.d(TAG,xmlCurrencyRate.get("CHF"));
+                Log.d(TAG,xmlCurrencyRate.get("ISK"));
+                Log.d(TAG,xmlCurrencyRate.get("NOK"));
+                Log.d(TAG,xmlCurrencyRate.get("HRK"));
+                Log.d(TAG,xmlCurrencyRate.get("TRY"));
+                Log.d(TAG,xmlCurrencyRate.get("AUD"));
+                Log.d(TAG,xmlCurrencyRate.get("BRL"));
+                Log.d(TAG,xmlCurrencyRate.get("CAD"));
+                Log.d(TAG,xmlCurrencyRate.get("CNY"));
+                Log.d(TAG,xmlCurrencyRate.get("HKD"));
+                Log.d(TAG,xmlCurrencyRate.get("IDR"));
+                Log.d(TAG,xmlCurrencyRate.get("ILS"));
+                Log.d(TAG,xmlCurrencyRate.get("INR"));
+                Log.d(TAG,xmlCurrencyRate.get("KRW"));
+                Log.d(TAG,xmlCurrencyRate.get("MXN"));
+                Log.d(TAG,xmlCurrencyRate.get("MYR"));
+                Log.d(TAG,xmlCurrencyRate.get("NZD"));
+                Log.d(TAG,xmlCurrencyRate.get("PHP"));
+                Log.d(TAG,xmlCurrencyRate.get("SGD"));
+                Log.d(TAG,xmlCurrencyRate.get("THB"));
+                Log.d(TAG,xmlCurrencyRate.get("ZAR"));*/
+                if (strings.length > 0) {
+                    if (strings[0] == "dollar" || strings[1] == "dollar") {
+                        rateFromXML = xmlCurrencyRate.get("USD");
+                        Log.d(TAG, rateFromXML);
+                    } else if (strings[0] == "Yen" || strings[1] == "Yen") {
+                        rateFromXML = xmlCurrencyRate.get("JPY");
+                    } else if (strings[0] == "toPeso" || strings[1] == "toPeso") {
+                        rateFromXML = xmlCurrencyRate.get("MXN");
+                    }
+                }
+
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
-            }
-            Document xmlFile = null;
-            try {
-                assert xmlBuilder != null;
-                xmlFile = xmlBuilder.parse("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (SAXException e) {
                 e.printStackTrace();
             }
-            NodeList myCubes = xmlFile.getElementsByTagName("Cube"); // extract nodes "Cube"
-
-            for (int i = 0; i < myCubes.getLength(); i++) {
-                Node data = myCubes.item(i);
-                Element currency = (Element) data;
-                Element currencyValue = (Element) data;
-                String currencyXML = currency.getAttribute("currency"); // get currency
-                String currencyRate = currencyValue.getAttribute("rate"); // get rate
-                xmlCurrencyRate.put(currencyXML, currencyRate); // put currency and rate in a hash map
-            }
-            if(strings.length > 0){
-                if (strings[0] == "dollar" || strings[1] == "dollar") {
-                    rateFromXML = xmlCurrencyRate.get("USD");
-                    Log.d(TAG,rateFromXML );
-                } else if(strings[0] == "Yen(JPY)" || strings[1] == "Yen(JPY)"){
-                    rateFromXML = xmlCurrencyRate.get("JPY");
-                } else if (strings[0] == "Peso(MXN)" || strings[1] == "Peso(MXN)"){
-                    rateFromXML = xmlCurrencyRate.get("MXN");
-                }
-            }
             return rateFromXML;
-        }
-
-        protected void onPostExecute(String aVoid) {
-            Log.d(TAG,"test");
         }
     }
 }
+
+
 
