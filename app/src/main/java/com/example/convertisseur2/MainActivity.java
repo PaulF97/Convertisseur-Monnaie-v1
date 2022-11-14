@@ -1,6 +1,8 @@
 package com.example.convertisseur2;
 
+
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -44,14 +46,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button switchActivity = (Button) this.findViewById(R.id.button4);
+        switchActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                methodeToSwitch();
+            }
+        });
+    }
+
+    private void methodeToSwitch(){
+        Intent switchActivityIntent = new Intent(this, MainActivity2.class);
+        startActivity(switchActivityIntent);
+        Log.d(TAG, "has switch to second activity");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "activity started");
-
+        // buttons
         Button myButtonConvert = (Button) this.findViewById(R.id.button3);
+
+        // texts
         this.myEuroNumber = (EditText) this.findViewById(R.id.myEnterNumber);
         this.myResultInDollar = (TextView) this.findViewById(R.id.textView);
 
@@ -68,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         adapterInit.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinnerMoneyFinal.setAdapter(adapterInit);
         mySpinnerMoneyFinal.setOnItemSelectedListener(this);
+
 
         // lorsqu'on appui sur le bouton
         myButtonConvert.setOnClickListener(new View.OnClickListener() {
