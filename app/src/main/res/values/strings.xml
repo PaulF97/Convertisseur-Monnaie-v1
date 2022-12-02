@@ -6,72 +6,72 @@
 
     <string-array name="currenceChoice">
         <item>Choose the currency</item>
-        <item>Dollar(USD)</item>
-        <item>Peso(MXN)</item>
-        <item>Yen(JPY)</item>
-        <item>Euro(EURO)</item>
-        <item>Lev Bulgare(BGN)</item>
-        <item>Couronne tchèque(CZK)</item>
-        <item>Couronne danoise(DKK)</item>
-        <item>Livre sterling(GBP)</item>
-        <item>Forint(HUF)</item>
-        <item>złoty(PLN)</item>
-        <item>Leu roumain(RON)</item>
-        <item>Couronne suédoise(SEK)</item>
-        <item>Franc suisse(CHF)</item>
-        <item>Couronne islandaise(ISK)</item>
-        <item>Couronne norvégienne(NOK)</item>
-        <item>Kuna croate(HRK)</item>
-        <item>Livre turque(TRY)</item>
-        <item>Dollar australien(AUD)</item>
-        <item>Réal brésilien(BRL)</item>
-        <item>Dollar canadien(CAD)</item>
-        <item>Renminbi(CNY)</item>
-        <item>Renminbi(HKD)</item>
-        <item>Roupie indonésienne(IDR)</item>
-        <item>Shekel(ILS)</item>
-        <item>Roupie indienne(INR)</item>
-        <item>Won sud-coréen(KRW)</item>
-        <item>Ringgit(MYR)</item>
-        <item>Dollar néo-zélandais(NZD)</item>
-        <item>Peso philippin(PHP)</item>
-        <item>Dollar de Singapour(SGD)</item>
-        <item>Baht(THB)</item>
-        <item>Rand(ZAR)</item>
+        <item>USD</item>
+        <item>MXN</item>
+        <item>JPY</item>
+        <item>EURO</item>
+        <item>BGN</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>GBP</item>
+        <item>HUF</item>
+        <item>PLN</item>
+        <item>RON</item>
+        <item>SEK</item>
+        <item>CHF</item>
+        <item>ISK</item>
+        <item>NOK</item>
+        <item>HRK</item>
+        <item>TRY</item>
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CNY</item>
+        <item>HKD</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>KRW</item>
+        <item>MYR</item>
+        <item>NZD</item>
+        <item>PHP</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>ZAR</item>
     </string-array>
     <string-array name="currencySelection">
         <item>Choose the currency</item>
-        <item>Dollar(USD)</item>
-        <item>Peso(MXN)</item>
-        <item>Yen(JPY)</item>
-        <item>Euro(EURO)</item>
-        <item>Lev Bulgare(BGN)</item>
-        <item>Couronne tchèque(CZK)</item>
-        <item>Couronne danoise(DKK)</item>
-        <item>Livre sterling(GBP)</item>
-        <item>Forint(HUF)</item>
-        <item>złoty(PLN)</item>
-        <item>Leu roumain(RON)</item>
-        <item>Couronne suédoise(SEK)</item>
-        <item>Franc suisse(CHF)</item>
-        <item>Couronne islandaise(ISK)</item>
-        <item>Couronne norvégienne(NOK)</item>
-        <item>Kuna croate(HRK)</item>
-        <item>Livre turque(TRY)</item>
-        <item>Dollar australien(AUD)</item>
-        <item>Réal brésilien(BRL)</item>
-        <item>Dollar canadien(CAD)</item>
-        <item>Renminbi(CNY)</item>
-        <item>Renminbi(HKD)</item>
-        <item>Roupie indonésienne(IDR)</item>
-        <item>Shekel(ILS)</item>
-        <item>Roupie indienne(INR)</item>
-        <item>Won sud-coréen(KRW)</item>
-        <item>Ringgit(MYR)</item>
-        <item>Dollar néo-zélandais(NZD)</item>
-        <item>Peso philippin(PHP)</item>
-        <item>Dollar de Singapour(SGD)</item>
-        <item>Baht(THB)</item>
-        <item>Rand(ZAR)</item>
+        <item>USD</item>
+        <item>MXN</item>
+        <item>JPY</item>
+        <item>EURO</item>
+        <item>BGN</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>GBP</item>
+        <item>HUF</item>
+        <item>PLN</item>
+        <item>RON</item>
+        <item>SEK</item>
+        <item>CHF</item>
+        <item>ISK</item>
+        <item>NOK</item>
+        <item>HRK</item>
+        <item>TRY</item>
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CNY</item>
+        <item>HKD</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>KRW</item>
+        <item>MYR</item>
+        <item>NZD</item>
+        <item>PHP</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>ZAR</item>
     </string-array>
 </resources>
