@@ -33,7 +33,7 @@ public class ModeOffLine extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.mode_off_line);
         Button backToConversion = (Button) findViewById(R.id.buttonBack);
         itemsBDD = (ListView) findViewById(R.id.listItemsCurrency);
         myDBget = new DataBaseManagement(this);

@@ -58,7 +58,7 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mode_on_line);
 
 
 
