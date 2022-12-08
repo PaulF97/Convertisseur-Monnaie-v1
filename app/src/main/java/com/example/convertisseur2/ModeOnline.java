@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,6 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -28,9 +30,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "Myapp";
+    static Object TestBackground;
     private String theNumber;
     private float theNumberToDouble;
     private float toDollar;
@@ -39,19 +42,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String currencyTXTinit;
     private String currencyTXTDest;
 
-    // hashMaps
-    HashMap<String, String> myHashEuro = new HashMap<>();
-    HashMap<String, String> myHashDollar = new HashMap<>();
-    HashMap<String, String> myHashYen = new HashMap<>();
-    HashMap<String, String> myHashPesos = new HashMap<>();
+    ArrayList arrayCurrency = new ArrayList();
+    ArrayList arrayRate = new ArrayList();
 
+    // hashMaps
+    private HashMap<String, String> myHashEuro = new HashMap<>();
+
+    DataBaseManagement myDataBase;
+
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "app created");
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
         Button switchActivity = (Button) this.findViewById(R.id.button4);
+
         switchActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,15 +73,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void methodeToSwitch(){
-        Intent switchActivityIntent = new Intent(this, MainActivity2.class);
+        Intent switchActivityIntent = new Intent(this, ModeOffLine.class);
+        switchActivityIntent.putExtra("currencyAndRate",myHashEuro); // pass the hashmap to second activity
         startActivity(switchActivityIntent);
-        Log.d(TAG, "has switch to second activity");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "activity started");
+        myDataBase = new DataBaseManagement(this);
+        TestBackground xmlBackground = new TestBackground();
+        xmlBackground.execute();
+        xmlBackground.doInBackground();
+        for(int i = 0; i<33; i++){
+            boolean insert = myDataBase.addCurrencyAndRate(arrayCurrency.get(i).toString(), arrayRate.get(i).toString());
+        }
+
         // buttons
         Button myButtonConvert = (Button) this.findViewById(R.id.button3);
 
@@ -97,12 +116,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "button pressed");
-                TestBackground xmlBackground = new TestBackground();
-                xmlBackground.execute();
+                Log.d(TAG,"test");
                 myResultInDollar.setText(String.valueOf(toDollar));
-                xmlBackground.doInBackground("euro", "USD");
-
                 if (Objects.equals((currencyTXTinit), "Choose the currency")) {
                     myResultInDollar.setText("veuillez choisir une currency de départ");
                 } else if (Objects.equals((currencyTXTDest), "Choose the currency")) {
@@ -119,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     theNumber = myEuroNumber.getText().toString(); // from currency to euro
                     theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                     String myHashValue = myHashEuro.get(mySpinnerMoneyInit.getSelectedItem().toString()); // get value of Spinner
-                    Float theHashToDouble = Float.parseFloat(myHashValue);// convert to double
+                    Float theHashToDouble = Float.parseFloat(myHashValue); // convert to double
                     myResultInDollar.setText(String.valueOf(theNumberToDouble / theHashToDouble));
                 } else {
                     theNumber = myEuroNumber.getText().toString(); // récupération du EditString
@@ -130,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Float theHashToDoubleDest = Float.parseFloat(myHashValueDest);// convert to double
                     toDollar = (float) ((theNumberToDouble * theHashToDoubleDest)/theHashToDoubleInit);
                     myResultInDollar.setText(String.valueOf(toDollar));
-                    Log.d(TAG, "test");
                 }
             }
         });
@@ -179,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d(TAG,"no spinner selected");
     }
 
-    private class TestBackground extends AsyncTask<String, String, String> {
+    public class TestBackground extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -197,9 +211,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Node data = myCubes.item(i);
                     Element currency = (Element) data;
                     Element currencyValue = (Element) data;
-                    String currencyXML = currency.getAttribute("currency"); // get currency
-                    String currencyRate = currencyValue.getAttribute("rate"); // get rate
-                    myHashEuro.put(currencyXML, currencyRate); // put currency and rate in a hash map
+                    arrayCurrency.add(currency.getAttribute("currency"));
+                    arrayRate.add(currencyValue.getAttribute("rate"));
+                    Log.d(TAG, "Test Array List" + arrayCurrency.get(i) + arrayRate.get(i));
+                    myHashEuro.put(arrayCurrency.get(i).toString(), arrayRate.get(i).toString());// put currency and rate in a hash map
+
                 }
 
             } catch (ParserConfigurationException e) {
@@ -209,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             } catch (SAXException e) {
                 e.printStackTrace();
             }
-            return rateFromXML;
+            return null;
         }
     }
 }
