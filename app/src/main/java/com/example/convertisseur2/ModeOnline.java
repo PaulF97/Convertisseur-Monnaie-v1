@@ -3,9 +3,11 @@ package com.example.convertisseur2;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Document;
@@ -37,7 +40,7 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
     private String theNumber;
     private float theNumberToDouble;
     private float toDollar;
-    private EditText myEuroNumber;
+    private EditText myNumber;
     private TextView myResultInDollar;
     private String currencyTXTinit;
     private String currencyTXTDest;
@@ -81,19 +84,22 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     protected void onStart() {
         super.onStart();
+        SQLiteDatabase db;
         myDataBase = new DataBaseManagement(this);
         TestBackground xmlBackground = new TestBackground();
         xmlBackground.execute();
         xmlBackground.doInBackground();
+
         for(int i = 0; i<33; i++){
             boolean insert = myDataBase.addCurrencyAndRate(arrayCurrency.get(i).toString(), arrayRate.get(i).toString());
         }
+
 
         // buttons
         Button myButtonConvert = (Button) this.findViewById(R.id.button3);
 
         // texts
-        this.myEuroNumber = (EditText) this.findViewById(R.id.myEnterNumber);
+        this.myNumber = (EditText) this.findViewById(R.id.myEnterNumber);
         this.myResultInDollar = (TextView) this.findViewById(R.id.textView);
 
         // Spinners
@@ -118,12 +124,18 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
             public void onClick(View view) {
                 Log.d(TAG,"test");
                 myResultInDollar.setText(String.valueOf(toDollar));
-                if (Objects.equals((currencyTXTinit), "Choose the currency")) {
-                    myResultInDollar.setText("veuillez choisir une currency de départ");
+
+                if(TextUtils.isEmpty(myNumber.getText().toString())){
+                    Toast.makeText(ModeOnline.this, "vous avez rien rentré", Toast.LENGTH_SHORT).show();
+                }else if (Objects.equals((currencyTXTinit), "Choose the currency")) {
+                    Toast.makeText(ModeOnline.this, "veuillez choisir une currency de départ", Toast.LENGTH_SHORT).show();
                 } else if (Objects.equals((currencyTXTDest), "Choose the currency")) {
-                    myResultInDollar.setText("veuillez choisir une currency d'arrivée");
-                } else if (Objects.equals(currencyTXTinit, "EURO")) { // from euro to currency
-                    theNumber = myEuroNumber.getText().toString(); // récupération du EditString
+                    Toast.makeText(ModeOnline.this, "veuillez choisir une currency d'arrivée", Toast.LENGTH_SHORT).show();
+                } else if(Objects.equals((currencyTXTinit), currencyTXTDest)){
+                    Log.d(TAG, "test toast");
+                    Toast.makeText(ModeOnline.this, "vous avez choisit la meme devise", Toast.LENGTH_SHORT).show();
+                }else if (Objects.equals(currencyTXTinit, "EURO")) { // from euro to currency
+                    theNumber = myNumber.getText().toString(); // récupération du EditString
                     theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                     String myHashValue = myHashEuro.get(mySpinnerMoneyFinal.getSelectedItem().toString()); // get value of Spinner
                     Float theHashToDouble = Float.parseFloat(myHashValue);// convert to double
@@ -131,13 +143,13 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
                     Log.d(TAG, "test mySpinner get" + mySpinnerMoneyFinal.getSelectedItem().toString());
                     Log.d(TAG, myHashEuro.get("USD"));
                 } else if(Objects.equals(currencyTXTDest, "EURO")){
-                    theNumber = myEuroNumber.getText().toString(); // from currency to euro
+                    theNumber = myNumber.getText().toString(); // from currency to euro
                     theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                     String myHashValue = myHashEuro.get(mySpinnerMoneyInit.getSelectedItem().toString()); // get value of Spinner
                     Float theHashToDouble = Float.parseFloat(myHashValue); // convert to double
                     myResultInDollar.setText(String.valueOf(theNumberToDouble / theHashToDouble));
-                } else {
-                    theNumber = myEuroNumber.getText().toString(); // récupération du EditString
+                }else {
+                    theNumber = myNumber.getText().toString(); // récupération du EditString
                     theNumberToDouble = Float.parseFloat(theNumber);// convert to double
                     String myHashValueInit = myHashEuro.get(mySpinnerMoneyInit.getSelectedItem().toString()); // get value of Spinner
                     String myHashValueDest = myHashEuro.get(mySpinnerMoneyFinal.getSelectedItem().toString()); // get value of Spinner
@@ -213,7 +225,7 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
                     Element currencyValue = (Element) data;
                     arrayCurrency.add(currency.getAttribute("currency"));
                     arrayRate.add(currencyValue.getAttribute("rate"));
-                    Log.d(TAG, "Test Array List" + arrayCurrency.get(i) + arrayRate.get(i));
+                    //Log.d(TAG, "Test Array List" + arrayCurrency.get(i) + arrayRate.get(i));
                     myHashEuro.put(arrayCurrency.get(i).toString(), arrayRate.get(i).toString());// put currency and rate in a hash map
 
                 }
