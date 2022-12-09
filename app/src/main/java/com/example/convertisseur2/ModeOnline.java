@@ -132,7 +132,6 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
                 } else if (Objects.equals((currencyTXTDest), "Choose the currency")) {
                     Toast.makeText(ModeOnline.this, "veuillez choisir une currency d'arrivée", Toast.LENGTH_SHORT).show();
                 } else if(Objects.equals((currencyTXTinit), currencyTXTDest)){
-                    Log.d(TAG, "test toast");
                     Toast.makeText(ModeOnline.this, "vous avez choisit la meme devise", Toast.LENGTH_SHORT).show();
                 }else if (Objects.equals(currencyTXTinit, "EURO")) { // from euro to currency
                     theNumber = myNumber.getText().toString(); // récupération du EditString
@@ -167,9 +166,6 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "activity destroyed");
-    /*    if(backgroundXML != null){
-            backgroundXML.cancel(true);
-        }*/
     }
 
     @Override
@@ -225,9 +221,7 @@ public class ModeOnline extends AppCompatActivity implements AdapterView.OnItemS
                     Element currencyValue = (Element) data;
                     arrayCurrency.add(currency.getAttribute("currency"));
                     arrayRate.add(currencyValue.getAttribute("rate"));
-                    //Log.d(TAG, "Test Array List" + arrayCurrency.get(i) + arrayRate.get(i));
                     myHashEuro.put(arrayCurrency.get(i).toString(), arrayRate.get(i).toString());// put currency and rate in a hash map
-
                 }
 
             } catch (ParserConfigurationException e) {
